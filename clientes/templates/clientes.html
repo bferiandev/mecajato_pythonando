@@ -9,17 +9,17 @@
     <div class="container">
         <div class="row">
 
-            <div class="col-md card-dashboard">
-                <p>Adicionar clientes</p>
+            <div onclick="exibir_form('1')" class="col-md card-dashboard">
+                <p class="text-card">Adicionar clientes</p>
             </div>
 
-            <div class="col-md card-dashboard">
-                <p>Atualizar clientes</p>
+            <div onclick="exibir_form('2')" class="col-md card-dashboard">
+                <p class="text-card">Atualizar clientes</p>
             </div>
 
         </div>
 
-            <div class="adicionar-cliente">
+            <div id="adicionar-cliente" class="adicionar-cliente">
                 <form  action="{% url 'clientes_app:clientes' %}" method="POST">
                     {% csrf_token %}
                     <div class="row">
@@ -73,7 +73,33 @@
                     <br>
                     <input type="submit" value="Cadastrar" class="btn-principal">        
                 </form>                
-            </div>       
+            </div>    
+            
+            <div id="att_cliente">
+                <p></p>                
+                <select onchange="dados_cliente()" name="" id="cliente-select" class="form-control">
+                    {% for cliente in clientes %}
+                    <option value="{{cliente.id}}"> {{cliente.nome}} {{cliente.sobrenome}} - CPF: {{cliente.cpf}} </option>
+                    {% endfor %}
+                </select>
+                <br>
+                <hr>
+
+                <div id="form-att-cliente">
+                    <p>Nome:</p>
+                    <input type="text" id="nome" class="form-control"><br>
+                    <p>Sobrenome:</p>
+                    <input type="text" id="sobrenome" class="form-control"><br>
+                    <p>E-mail:</p>
+                    <input type="text" id="email" class="form-control"><br>
+                    <p>CPF:</p>
+                    <input type="text" id="cpf" class="form-control"><br>
+
+
+
+                </div>
+
+            </div>
     </div>
     <script src="{% static 'js/clientes.js' %}"></script>    
 {% endblock %}
