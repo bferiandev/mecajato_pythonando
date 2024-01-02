@@ -1,6 +1,40 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.http import HttpResponse
+from .models import Cliente, Carro
+import re
 
-class ClientesView(TemplateView):
-    template_name = 'clientes.html'
-    
+
+def clientes(request):
+    if request.method == 'GET':
+        return render(request, 'clientes.html')
+    elif request.method == 'POST':
+        nome = request.POST.get('nome')
+        sobrenome = request.POST.get('sobrenome')
+        email = request.POST.get('email')
+        cpf = request.POST.get('cpf')
+        carro = request.POST.getlist('carro')
+        placa = request.POST.getlist('placa')
+        ano = request.POST.getlist('ano')
+
+        cliente = Cliente.objects.filter(cpf=cpf)
+
+        if cliente.exists():
+            return render(request, 'clientes.html', {'nome': nome, 'sobrenome': sobrenome, 'email': email, 'carros': zip(carro, placa, ano)})
+        
+        if not re.fullmatch(re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+'), email):
+            return render(request, 'clientes.html', {'nome': nome, 'sobrenome': sobrenome, 'cpf': cpf, 'carros': zip(carro, placa, ano)})
+
+        cliente = Cliente(
+            nome = nome,
+            sobrenome = sobrenome,
+            email = email,
+            cpf = cpf
+        )
+
+        cliente.save()
+        
+        for carro, placa, ano in zip(carro, placa, ano):
+            car = Carro(carro=carro, placa=placa, ano=ano, cliente=cliente)
+            car.save()
+   
+        return HttpResponse('TESTE')
