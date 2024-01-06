@@ -5,6 +5,8 @@ from . import views
 app_name='clientes_app'
 
 urlpatterns = [
-    path('clientes/', views.clientes, name='clientes'),
-    path('clientes/atualiza_cliente/', views.att_cliente, name='atualiza_clientes'),  
+    path('', views.clientes, name='clientes'),
+    path('atualiza_cliente/', views.att_cliente, name='atualiza_clientes'),
+    path('update_carro/<int:id>', views.update_carro, name='update_carro'),
+    path('excluir_carro/<int:id>', views.excluir_carro, name='excluir_carro'),
 ]
